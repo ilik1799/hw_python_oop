@@ -63,7 +63,7 @@ class Running(Training):
 
     def get_spent_calories(self) -> float:
         CALORIES_RATIO_1 = 18
-        CALORIES_RATIO_2 = 10
+        CALORIES_RATIO_2 = 18
         calories = (
             (CALORIES_RATIO_1 * self.get_mean_speed() + CALORIES_RATIO_2)
             * self.weight / self.M_IN_KM * self.duration * self.MIN_IN_HOUR
