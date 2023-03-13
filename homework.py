@@ -77,7 +77,7 @@ class SportsWalking(Training):
     CALORIES_RATIO_1: float = 0.035
     CALORIES_RATIO_2: float = 0.029
     KM_IN_MSEC: float = 0.278
-    CM_IN_M: int = 100
+    CM_IN_M: float = 100.0
 
     def __init__(self, action: int, duration: float, weight: float,
                  height: float) -> None:
@@ -95,7 +95,7 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     RATIO_SWIMMING_ADD: float = 1.1
-    RATIO_SWIMMING_MULT: int = 2
+    RATIO_SWIMMING_MULT: float = 2.0
     LEN_STEP: float = 1.38
 
     def __init__(self,
