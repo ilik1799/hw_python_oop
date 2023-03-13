@@ -1,3 +1,7 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
     training_type: str
@@ -18,6 +22,7 @@ class InfoMessage:
         return return_message
 
 
+@dataclass
 class Training:
     """Базовый класс тренировки."""
     LEN_STEP: float = 0.65
@@ -67,12 +72,14 @@ class Running(Training):
         return calories
 
 
+@dataclass
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
     CALORIES_RATIO_1: float = 0.035
     CALORIES_RATIO_2: float = 0.029
     KM_IN_MSEC: float = 0.278
     CM_IN_M: int = 100
+    squared: int = 2
 
     def __init__(self, action: int, duration: float, weight: float,
                  height: float) -> None:
@@ -82,11 +89,12 @@ class SportsWalking(Training):
     def get_spent_calories(self) -> float:
         return ((self.CALORIES_RATIO_1 * self.weight
                 + ((self.get_mean_speed() * self.KM_IN_MSEC)
-                   ** 2 / (self.height / self.CM_IN_M))
+                   ** self.squared / (self.height / self.CM_IN_M))
                 * self.CALORIES_RATIO_2 * self.weight)
                 * (self.duration * self.MIN_IN_HOUR))
 
 
+@dataclass
 class Swimming(Training):
     """Тренировка: плавание."""
     RATIO_SWIMMING_ADD: float = 1.1
