@@ -22,6 +22,7 @@ class InfoMessage:
         return return_message
 
 
+@dataclass
 class Training:
     """Базовый класс тренировки."""
     LEN_STEP: float = 0.65
@@ -92,6 +93,7 @@ class SportsWalking(Training):
                 * (self.duration * self.MIN_IN_HOUR))
 
 
+@dataclass
 class Swimming(Training):
     """Тренировка: плавание."""
     RATIO_SWIMMING_ADD: float = 1.1
