@@ -62,8 +62,8 @@ class Running(Training):
     """Тренировка: бег."""
 
     def get_spent_calories(self) -> float:
-        CALORIES_RATIO_1 = 18
-        CALORIES_RATIO_2 = 18
+        CALORIES_RATIO_1: int = 18
+        CALORIES_RATIO_2: float = 1.79
         calories = (
             (CALORIES_RATIO_1 * self.get_mean_speed() + CALORIES_RATIO_2)
             * self.weight / self.M_IN_KM * self.duration * self.MIN_IN_HOUR
@@ -75,6 +75,8 @@ class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
     CALORIES_RATIO_1: float = 0.035
     CALORIES_RATIO_2: float = 0.029
+    KM_IN_MSEC: float = 0.278
+    CM_IN_M: int = 100
 
     def __init__(self, action: int, duration: float, weight: float,
                  height: float) -> None:
@@ -82,17 +84,18 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        return ((self.CALORIES_RATIO_1 * self.weight
-                + (self.get_mean_speed() ** 2 // self.height)
-                * self.CALORIES_RATIO_2 * self.weight)
-                * self.duration * self.MIN_IN_HOUR)
+        return (self.CALORIES_RATIO_1 * self.weight
+                + (((self.get_mean_speed() * self.KM_IN_MSEC) ** 2)
+                    // (self.height / self.CM_IN_M))
+                * self.CALORIES_RATIO_2 * self.weight
+                * (self.duration * self.MIN_IN_HOUR))
 
 
 class Swimming(Training):
     """Тренировка: плавание."""
     RATIO_SWIMMING_ADD: float = 1.1
-    RATIO_SWIMMING_MULT: float = 2
-    LEN_STEP = 1.38
+    RATIO_SWIMMING_MULT: int = 2
+    LEN_STEP: float = 1.38
 
     def __init__(self,
                  action: int,
