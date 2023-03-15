@@ -119,7 +119,9 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    workout = {"SWM": Swimming, "RUN": Running, "WLK": SportsWalking}
+    workout: dict(str, type(Training)) = {"SWM": Swimming,
+                                          "RUN": Running,
+                                          "WLK": SportsWalking}
 
     if workout_type not in workout.keys():
         raise KeyError('Неверный тип')
