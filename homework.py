@@ -22,7 +22,6 @@ class InfoMessage:
         return return_message
 
 
-@dataclass
 class Training:
     """Базовый класс тренировки."""
     LEN_STEP: float = 0.65
@@ -61,25 +60,21 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    CALORIES_RATIO_1: int = 18
-    CALORIES_RATIO_2: float = 1.79
 
     def get_spent_calories(self) -> float:
+        CALORIES_RATIO_1 = 18
+        CALORIES_RATIO_2 = 25
         calories = (
-            (self.CALORIES_RATIO_1 * self.get_mean_speed()
-             + self.CALORIES_RATIO_2) * self.weight / self.M_IN_KM
-            * self.duration * self.MIN_IN_HOUR)
+            (CALORIES_RATIO_1 * self.get_mean_speed() + CALORIES_RATIO_2)
+            * self.weight / self.M_IN_KM * self.duration * self.MIN_IN_HOUR
+        )
         return calories
 
 
-@dataclass
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
     CALORIES_RATIO_1: float = 0.035
     CALORIES_RATIO_2: float = 0.029
-    KM_IN_MSEC: float = 0.278
-    CM_IN_M: int = 100
-    squared: int = 2
 
     def __init__(self, action: int, duration: float, weight: float,
                  height: float) -> None:
@@ -88,18 +83,16 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         return ((self.CALORIES_RATIO_1 * self.weight
-                + ((self.get_mean_speed() * self.KM_IN_MSEC)
-                   ** self.squared / (self.height / self.CM_IN_M))
+                + (self.get_mean_speed() ** 2 // self.height)
                 * self.CALORIES_RATIO_2 * self.weight)
-                * (self.duration * self.MIN_IN_HOUR))
+                * self.duration * self.MIN_IN_HOUR)
 
 
-@dataclass
 class Swimming(Training):
     """Тренировка: плавание."""
     RATIO_SWIMMING_ADD: float = 1.1
-    RATIO_SWIMMING_MULT: int = 2
-    LEN_STEP: float = 1.38
+    RATIO_SWIMMING_MULT: float = 2
+    LEN_STEP = 1.38
 
     def __init__(self,
                  action: int,
@@ -122,19 +115,19 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    workout = {"SWM": Swimming, "RUN": Running, "WLK": SportsWalking}
+    workout: dict(str, type(Training)) = {'SWM': Swimming,
+                                          'RUN': Running,
+                                          'WLK': SportsWalking}
 
-    for key in workout.keys():
-        if workout_type == key:
-            constr = workout[key]
-            return constr(*data)
+    if workout_type not in workout.keys():
+        raise KeyError('Wrong type.')
+    return workout[workout_type](*data)
 
 
 def main(training: Training) -> None:
     """Главная функция."""
     info = training.show_training_info()
-    message = info.get_message()
-    print(message)
+    print(info.get_message())
 
 
 if __name__ == '__main__':
